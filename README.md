@@ -6,7 +6,7 @@ Tilck (Tiny Linux-Compatible Kernel)
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
 <p align="center">
-    <img src="http://vvaltchev.github.io/tilck_imgs/screen1v2.png" alt="Tilck">
+    <img src="http://vvaltchev.github.io/tilck_imgs/v2/main.png" alt="Tilck">
 </p>
 
 What is Tilck?
@@ -36,8 +36,8 @@ What Tilck is NOT ?
 
 An attempt to re-write and/or replace the Linux kernel. Tilck is a completely
 different kernel that has a *partial* compatibility with Linux just in order to
-take advantage of the programs (and toolchains) already written for it. Also,
-that allows to validate its correctness: if a program works correctly on Linux,
+take advantage of the programs (and toolchains) already written for it. Also, that
+helps a lot to validate its correctness: if a program works correctly on Linux,
 it must work the same way on Tilck as well (except for not-implemented features).
 **But**, having a fair amount of Linux programs working on it, is just a starting
 point: after that, Tilck will evolve in a different way and it will have its own
@@ -45,38 +45,16 @@ unique set of features. Tilck is fundamentally different from Linux in its desig
 and its trade-offs as it **does not** aim to target multi-user server or desktop
 machines.
 
-[article]: https://github.com/vvaltchev/tilck/wiki/Getting-performance-through-simplification:-Tilck's-console
-
 Current state of the kernel
 ----------------------------------------
 
-Today that project is **far** from being ready for any kind of production use, but
-it is growing very fast with major patch series being merged every week.
-It has a read-only support to `FAT32` ramdisk, and it can run a discrete amount of
-`busybox` applications compiled for embedded Linux. Also, it has a console
-(supporting both text-mode and framebuffer) which understands most of the
-escape sequences supported by the Linux console: that allows even applications like
-`vim` to work. Finally, the kernel supports graphical Linux applications using the
-framebuffer.
-
-For a slightly more accurate idea of kernel's features, please check the list of
-[supported Linux syscalls] or see what `Tilck` can do at any time by building it.
-**Note**: the project's build system has been designed to work *effortlessly* on
-a variety of Linux distributions and it offers to automatically install (using
-distribution's package management system) the missing packages. About that, it's
-worth mentioning that it's part of project's philosophy to require as few as
-possible packages to be installed on the machine (e.g. `bintools`, `gcc`, `git`,
-`wget` etc.): the rest of the required packages are downloaded and compiled in
-the `toolchain` directory.
-
-In case of any problems with the build system, please don't hesitate to file an
-issue describing your problem.
+TODO: describe this
 
 #### Screenshots
 
 <p align="center">
     <a href="https://github.com/vvaltchev/tilck/wiki/Screenshots">
-        <img src="http://vvaltchev.github.io/tilck_imgs/thumbnails.png">
+        <img src="http://vvaltchev.github.io/tilck_imgs/v2/thumbnails.png">
     </a>
 </p>
 
@@ -85,29 +63,19 @@ For full-size screenshots, see the [screenshots] page in Tilck's wiki.
 [supported Linux syscalls]: docs/syscalls.md
 [screenshots]: https://github.com/vvaltchev/tilck/wiki/Screenshots
 
-The legacy bootloader
+Tilck's bootloader
+----------------------------------------
+`Tilck` comes with an interactive bootloader working both on legacy BIOS and on
+UEFI systems as well. The bootloader allows the user to choose the desired video
+mode, the kernel file itself and to edit kernel's cmdline.
+
+TODO: add a screenshot here.
+
+3rd-party bootloaders
 ----------------------------------------
 
-`Tilck` includes a 3-stage multiboot bootloader able to load in memory the
-contents of the boot-drive at a pre-defined physical address. In its 3rd stage
-(written in C), the bootloader loads from an in-memory `FAT32` partition the ELF
-kernel of `Tilck` [it understands the ELF format] and jumps to its entry-point.
-Before the final jump to the kernel, the bootloader allows the user the choose
-the resolution of a graphics video mode. The VGA text-mode is supported as well.
-
-The UEFI bootloader
-----------------------------------------
-
-`Tilck` includes also a fully-working multiboot EFI bootloader which boots the
-kernel in graphics mode (text mode is not available when booting using UEFI).
-From kernel's point-of-view, the two bootloaders are equivalent.
-
-Other bootloaders
-----------------------------------------
-
-`Tilck` can be booted by any bootloader supporting `multiboot 1.0`. For example,
-qemu's simple bootloader designed as a shortcut for loading directly the Linux
-kernel, without any on-disk bootloaders can perfectly work with `Tilck`:
+`Tilck` can be loaded by any bootloader supporting `multiboot 1.0`. For example,
+qemu's built-in bootloader works perfectly with `Tilck`:
 
     qemu-system-i386 -kernel ./build/tilck -initrd ./build/fatpart
 
@@ -123,8 +91,8 @@ file (or create another one) by adding an entry like:
 
 ```
 menuentry "Tilck" {
-    multiboot <PATH-TO-TILCK>/tilck/build/tilck
-    module --nounzip <PATH-TO-TILCK>/tilck/build/fatpart
+    multiboot <PATH-TO-TILCK-BUILD-DIR>/tilck
+    module --nounzip <PATH-TO-TILCK-BUILD-DIR>/fatpart
     boot
 }
 ```
